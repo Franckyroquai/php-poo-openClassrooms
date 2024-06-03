@@ -1,33 +1,36 @@
 <?php
 
+declare(strict_types=1);
 
-class TopChanteur 
+class User
+{
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
 
-{ 
+   public function __construct(public string $username, public string $status = self::STATUS_ACTIVE)
+    {
+    }
 
-    public function __invoke(...$args) 
+    public function printStatus()
+    {
+        echo $this->status;
+    }
+}
 
-    { 
 
-        return ucwords(sprintf('%s %s%s', ...$args)); 
+class Admin extends User
+{
+    // ...
 
+    public function printCustomStatus()
+    {
+        echo "L’administrateur {$this->username} a pour statut : ";
+        $this->printStatus(); // on appelle printStatus du parent depuis la classe enfant
     }
 
 }
 
 
-class CharlyEtLulu { 
-
-    public function __construct(private TopChanteur $topChanteur){}
-
-
-    public function __call($method, $arguments) { 
-
-        return ($this->topChanteur)($method, ...$arguments); 
-
-    }
-
-} 
-
-$queen = (new CharlyEtLulu(new TopChanteur))->freddy('mer', 'cury');
-echo $queen;
+$admin = new Admin('Lily');
+$admin->printCustomStatus(); // Affiche “L’administrateur Lily a pour statut : active”
+$admin->printStatus(); // printStatus n’existe pas dans la classe Admin, donc printStatus de la classe User sera appelée grâce à l’héritage
