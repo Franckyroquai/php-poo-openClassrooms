@@ -79,7 +79,7 @@ class Player extends AbstractPlayer
     }
 }
 
-class QueuingPlayer extends Player
+final class QueuingPlayer extends Player
 {
     public function __construct(AbstractPlayer $player, protected int $range = 1)
     {
