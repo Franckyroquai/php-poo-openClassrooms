@@ -79,7 +79,7 @@ class Player extends AbstractPlayer
     }
 }
 
-final class QueuingPlayer extends Player
+class QueuingPlayer extends Player
 {
     public function __construct(AbstractPlayer $player, protected int $range = 1)
     {
@@ -97,8 +97,21 @@ final class QueuingPlayer extends Player
     }
 }
 
-$greg = new Player('greg');
-$jade = new Player('jade');
+class BlitzPlayer extends Player
+{
+    public function __construct(public string $name = 'anonymous', public float $ratio = 1200.0)
+    {
+        parent::__construct($name, $ratio);
+    }
+
+    public function updateRatioAgainst(AbstractPlayer $player, int $result): void
+    {
+        $this->ratio += 128 * ($result - $this->probabilityAgainst($player));
+    }
+}
+
+$greg = new BlitzPlayer('greg');
+$jade = new BlitzPlayer('jade');
 
 $lobby = new Lobby();
 $lobby->addPlayers($greg, $jade);
